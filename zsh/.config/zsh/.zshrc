@@ -9,10 +9,10 @@ fi
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 export PATH=$PATH:~/Library/Android/sdk/platform-tools
 # Path to your Oh My Zsh installation.
+# Homebrew PATH (this might be commented out or missing)
+export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
 export ZSH="$HOME/.oh-my-zsh"
-if command -v rbenv >/dev/null 2>&1; then
-    eval "$(rbenv init -)"
-fi
+eval "$(rbenv init -)"
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time Oh My Zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -151,9 +151,7 @@ export PATH=${PATH}:/usr/local/mysql-9.2.0-macos15-arm64/bin
 echo 'export PATH="/opt/homebrew/opt/postgresql@16/bin:$PATH"' >> ~/.zshrc
 export PATH="/opt/homebrew/opt/postgresql@16/bin:$PATH"
 # FZF
-if command -v fzf >/dev/null 2>&1; then
-    eval "$(fzf --zsh)"
-fi
+eval "$(fzf --zsh)"
 
 # FZF with Git right in the shell by Junegunn : check out his github below
 # Keymaps for this is available at https://github.com/junegunn/fzf-git.sh
@@ -165,9 +163,7 @@ alias nlof="~/.config/scripts/fzf_listoldfiles.sh"
 alias fman="compgen -c | fzf | xargs man"
 
 # Zoxide
-if command -v zoxide >/dev/null 2>&1; then
-    eval "$(zoxide init zsh)"
-fi
+eval "$(zoxide init zsh)"
 # zoxide (called from ~/scripts/)
 alias nzo="~/.config/scripts/zoxide_openfiles_nvim.sh"
 
@@ -176,6 +172,3 @@ alias ls="eza --no-filesize --long --color=always --icons=always --no-user"
 
 #ide tmux
 export PATH="$HOME/.config/scripts:$PATH"
-
-# Homebrew PATH (this might be commented out or missing)
-export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"

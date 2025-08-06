@@ -1,3 +1,3 @@
-
-export PATH="$PATH:/Users/rajneeshverma/.foundry/bin"
-. "$HOME/.cargo/env"
+# export PATH="$PATH:$HOME/.foundry/bin"
+# . "$HOME/.cargo/env"
+export ZDOTDIR="$HOME/.config/zsh"

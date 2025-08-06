@@ -1,0 +1,62 @@
+#!/bin/bash
+
+# Function to create the IDE layout
+create_ide_layout() {
+  local project_path=$1
+  local num_panes=$2
+
+  # Open the current project in nvim in the big pane
+  tmux send-keys -t 0 "nvim $project_path" C-m
+
+  # Create the specified number of panes
+  if [ "$num_panes" -ge 2 ]; then
+    tmux split-window -v -l 30% # Bottom pane (30% height)
+    if [ "$num_panes" -ge 3 ]; then
+      tmux split-window -h -l 50% # Split bottom pane into left and right
+    fi
+    if [ "$num_panes" -ge 4 ]; then
+      tmux split-window -h -l 33% # Split right pane into two
+    fi
+  fi
+
+  # Focus on the big pane (pane 0)
+  tmux select-pane -t 0
+}
+
+# Get the current directory (project path)
+project_path=$(pwd)
+
+# Parse the command-line argument
+num_panes=1 # Default to 1 pane
+if [ "$1" == "-2" ]; then
+  num_panes=2
+elif [ "$1" == "-3" ]; then
+  num_panes=3
+elif [ "$1" == "-4" ]; then
+  num_panes=4
+fi
+
+# Check if inside a tmux session
+if [ -z "$TMUX" ]; then
+  # Check if the session already exists
+  if tmux has-session -t ide-session 2>/dev/null; then
+    # If it exists, just attach to it
+    tmux attach-session -t ide-session
+  else
+    # Create new session and set up the layout
+    tmux new-session -s ide-session -d
+    create_ide_layout "$project_path" "$num_panes"
+    tmux attach-session -t ide-session
+  fi
+else
+  # Already in a tmux session
+  # Check if we need to create the layout
+  pane_count=$(tmux list-panes | wc -l)
+  if [ "$pane_count" -lt "$num_panes" ]; then
+    create_ide_layout "$project_path" "$num_panes"
+  else
+    # If panes already exist, just open the project in the big pane
+    tmux send-keys -t 0 "nvim $project_path" C-m
+    tmux select-pane -t 0
+  fi
+fi
